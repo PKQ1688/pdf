@@ -4,12 +4,12 @@ import requests
 import json
 import base64
 
-file_path = 'pdf_file/test_1.pdf'
+file_path = 'NAP/Oct_2020/224920201000059255-L02.pdf'
 
 
 def get_result(encodestr):
     payload = {"image": encodestr}
-    r = requests.post("http://localhost:2003/pdf_parse_service/", json=payload)
+    r = requests.post("http://192.168.1.135:2003/NAP_ocr_service/", json=payload)
     # print(r.text)
     res = json.loads(r.text)
     return res
