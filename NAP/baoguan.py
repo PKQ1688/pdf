@@ -19,7 +19,7 @@ def one_page(page):
     for line_index in range(len(text_list)):
         # print(line_index)
         line = text_list[line_index]
-        print(line)
+        # print(line)
 
         if "*****" in line:
             # print('=====================')
@@ -83,27 +83,34 @@ def one_page(page):
         text_list_index_2 = text_list[index + 2].split(' ')
 
         text_list_index_2 = handle_something(text_list_index_2)
-        print(text_list_index_2)
+        # print(text_list_index_2)
         flag = 0
         if len(text_list_index_2) == 2:
             flag = 1
-        # print(text_list_index_1[0])
+        print(text_list_index_2)
         if text_list_index_1[0].isdigit():
             if flag:
                 info_str = text_list_index_0[2] + '|' + text_list_index_1[1]
             else:
-                info_str = text_list_index_0[2] + '|' + text_list_index_1[1] + '|' + text_list_index_2[0]
+                tmp = ""
+                for xx in text_list_index_2[:-2]:
+                    tmp += xx
+                info_str = text_list_index_0[2] + '|' + text_list_index_1[1] + '|' + tmp
             res['商品编码'].append(text_list_index_0[1] + text_list_index_1[0])
         else:
             if flag:
                 info_str = text_list_index_0[2] + '|' + text_list_index_1[0]
             else:
-                info_str = text_list_index_0[2] + text_list_index_1[0] + text_list_index_2[0]
+                tmp = ""
+                for xx in text_list_index_2[:-2]:
+                    tmp += xx
+                info_str = text_list_index_0[2] + text_list_index_1[0] + tmp
             res['商品编码'].append(text_list_index_0[1])
 
         # print(info_str)
         res['项号'].append(text_list_index_0[0])
         info_str = info_str.replace('及', '|')
+        print(info_str)
         info_list = info_str.split('|')
         info_list = [word for word in info_list if word != ""]
         print(info_list)
@@ -188,7 +195,7 @@ def get_result(pdf_path):
         page_index += 1
         # break
     pdf.close()
-    print(all_result)
+    # print(all_result)
     return all_result
 
 
