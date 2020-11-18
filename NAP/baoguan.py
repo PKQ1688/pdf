@@ -83,6 +83,7 @@ def one_page(page):
         text_list_index_2 = text_list[index + 2].split(' ')
 
         text_list_index_2 = handle_something(text_list_index_2)
+        print(text_list_index_2)
         flag = 0
         if len(text_list_index_2) == 2:
             flag = 1
@@ -116,7 +117,7 @@ def one_page(page):
             if "%" in info:
                 # res['材质'].append(info)
                 tmp_cai += info
-            if len(re.findall(r'[0-9]', info)) > 5 and "%" not in info:
+            if len(re.findall(r'[0-9]', info)) > 5 and "%" not in info and kuan_flag:
                 res['款号'].append(info)
                 kuan_flag = False
             if "无中文" in info and info.replace("无中文", "") != "":
