@@ -118,9 +118,14 @@ def one_page(page):
         tmp_cai = ""
         ping_flag = True
         kuan_flag = True
+        zhi_flag = True
         for info in info_list:
-            if "织" in info and len(info) < 4:
-                res['织造方式'].append(info)
+            if "梭织" in info and zhi_flag:
+                res['织造方式'].append("梭织")
+                zhi_flag = False
+            elif "针织" in info and zhi_flag:
+                res["织造方式"].append("针织")
+                zhi_flag = False
             if "%" in info:
                 # res['材质'].append(info)
                 tmp_cai += info
@@ -133,7 +138,9 @@ def one_page(page):
         res['材质'].append(tmp_cai)
         # res['款号'].append(text_list_index_2[0].split("|")[1])
         # print(info_list[-2])
-        res['品名'].append(info_list[0])
+        if zhi_flag:
+            res['织造方式'].append("")
+        res['品名'].append(info_list[0].replace('4', ''))
         if ping_flag:
             if info_list[-1].isdigit():
                 res['品牌'].append(info_list[-2].replace("无中文", ""))
