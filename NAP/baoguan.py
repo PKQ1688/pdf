@@ -29,7 +29,7 @@ def one_page(page):
             dan_num = "".join(dan_num_list)
             # print(dan_num)
             res["报关单号"].append(dan_num)
-        if len(re.findall(r'\*[0-9]*\*', line)) > 0:
+        elif len(re.findall(r'\*[0-9]*\*', line)) > 0:
             dan_num = line.replace("*", "")
             # print(dan_num)
             res["报关单号"].append(dan_num)
@@ -148,10 +148,19 @@ def one_page(page):
                 res['品牌'].append(info_list[-1].replace("无中文", ""))
         res['原产国'].append(text_list_index_0[5])
         res['币制'].append(text_list_index_2[-1])
-        tmp = text_list_index_2[-2]
+        # tmp = text_list_index_2[-2]
         # print(1111, text_list_index_0[-5])
         # print(2222, text_list_index_1[-6])
         # print(3333, text_list_index_2[-2])
+        tmp_list = [text_list_index_0[-6], text_list_index_1[-6], text_list_index_2[-2]]
+        print(2222,tmp_list)
+        # tmp_list = [tmp for tmp in tmp_list if "千克" not in tmp and tmp != "" and not tmp.isdigit()]
+        new_tmp_list = []
+        for tmp in tmp_list:
+            if "个" in tmp or "件" in tmp or "双" in tmp or "个" in tmp or "条" in tmp:
+                new_tmp_list.append(tmp)
+        print('1111', new_tmp_list)
+        tmp = new_tmp_list[-1]
 
         num = ''.join(re.findall(r'[0-9]', tmp))
         res['数量'].append(num)
@@ -162,15 +171,15 @@ def one_page(page):
             res["款号"].append("")
         # break
 
-    # print(res)
-    if "报关单号" not in res:
-        res["报关单号"] = [""]
-    info_length = len(res['项号'])
-    for key in res:
-        if len(res[key]) < info_length:
-            res[key] += [""] * (info_length - len(res[key]))
-        else:
-            res[key] = res[key][:info_length]
+        # print(res)
+        if "报关单号" not in res:
+            res["报关单号"] = [""]
+        info_length = len(res['项号'])
+        for key in res:
+            if len(res[key]) < info_length:
+                res[key] += [""] * (info_length - len(res[key]))
+            else:
+                res[key] = res[key][:info_length]
 
     return res
 
@@ -236,7 +245,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Params to use fro train algorithm")
 
     parser.add_argument("--pdf_path", "-pdf", type=str,
-                        default="11.11/text.pdf", nargs='?', help="what scenes this model used")
+                        default="11.11/旧text.pdf", nargs='?', help="what scenes this model used")
     args = parser.parse_args()
 
     get_excel(args.pdf_path)
