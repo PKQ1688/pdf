@@ -85,7 +85,7 @@ def one_page(page):
         # print(re.findall(r'[a-zA-Z]*', text_list_index_1[2]))
         re_res = [i for i in re.findall(r'[a-zA-Z]*', text_list_index_1[2]) if i != ""]
         # print(re_res)
-        if len(re_res) > 0:
+        if len(re_res) > 0 and "(" not in text_list_index_1[2]:
             text_list_index_1[1] += text_list_index_1[2]
             text_list_index_1.pop(2)
 
@@ -184,6 +184,8 @@ def one_page(page):
         num = ''.join(re.findall(r'[0-9]', tmp))
         res['数量'].append(num)
         res['单位'].append(tmp.replace(num, ""))
+        print(text_list_index_0)
+        print(text_list_index_1)
         res['总价'].append(text_list_index_1[-5])
 
         if kuan_flag:
