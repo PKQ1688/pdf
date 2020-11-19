@@ -75,10 +75,10 @@ def one_page(page):
                 text_list_index_0.insert(2, text_list_index_0[1].replace(nums[0], ""))
             text_list_index_0[1] = nums[0]
 
-        print("0000000000", text_list_index_0)
+        # print("0000000000", text_list_index_0)
         text_list_index_1 = text_list[index + 1].split(' ')
 
-        print("3333333", text_list_index_1)
+        # print("3333333", text_list_index_1)
 
         text_list_index_1 = handle_something(text_list_index_1)
 
@@ -89,7 +89,7 @@ def one_page(page):
             text_list_index_1[1] += text_list_index_1[2]
             text_list_index_1.pop(2)
 
-        print("1111111111", text_list_index_1)
+        # print("1111111111", text_list_index_1)
         text_list_index_2 = text_list[index + 2].split(' ')
 
         text_list_index_2 = handle_something(text_list_index_2)
@@ -167,7 +167,11 @@ def one_page(page):
         # print(1111, text_list_index_0[-5])
         # print(2222, text_list_index_1[-6])
         # print(3333, text_list_index_2[-2])
-        tmp_list = [text_list_index_0[-6], text_list_index_1[-6], text_list_index_2[-2]]
+        try:
+            tmp_list = [text_list_index_0[-6], text_list_index_1[-6], text_list_index_2[-2]]
+        except Exception as e:
+            print(e)
+            tmp_list = [text_list_index_2[-2]]
         # print(2222, tmp_list)
         # tmp_list = [tmp for tmp in tmp_list if "千克" not in tmp and tmp != "" and not tmp.isdigit()]
         new_tmp_list = []
@@ -263,7 +267,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Params to use fro train algorithm")
 
     parser.add_argument("--pdf_path", "-pdf", type=str,
-                        default="11.11/旧text.pdf", nargs='?', help="what scenes this model used")
+                        default="11.11/text.pdf", nargs='?', help="what scenes this model used")
     args = parser.parse_args()
 
     get_excel(args.pdf_path)
