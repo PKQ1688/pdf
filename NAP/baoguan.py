@@ -6,8 +6,8 @@ import xlwt
 import collections
 import re
 
-
 # pdf_path = "Oct_2020/224920201000059894-A01.pdf"
+pd.set_option('display.max_columns', None)
 
 
 def one_page(page):
@@ -75,11 +75,21 @@ def one_page(page):
                 text_list_index_0.insert(2, text_list_index_0[1].replace(nums[0], ""))
             text_list_index_0[1] = nums[0]
 
-        # print(2222222, text_list_index_0)
+        print("0000000000", text_list_index_0)
         text_list_index_1 = text_list[index + 1].split(' ')
 
+        print("3333333", text_list_index_1)
+
         text_list_index_1 = handle_something(text_list_index_1)
-        # print(text_list_index_1)
+
+        # print(re.findall(r'[a-zA-Z]*', text_list_index_1[2]))
+        re_res = [i for i in re.findall(r'[a-zA-Z]*', text_list_index_1[2]) if i != ""]
+        # print(re_res)
+        if len(re_res) > 0:
+            text_list_index_1[1] += text_list_index_1[2]
+            text_list_index_1.pop(2)
+
+        print("1111111111", text_list_index_1)
         text_list_index_2 = text_list[index + 2].split(' ')
 
         text_list_index_2 = handle_something(text_list_index_2)
@@ -87,7 +97,7 @@ def one_page(page):
         flag = 0
         if len(text_list_index_2) == 2:
             flag = 1
-        print(text_list_index_2)
+        # print(text_list_index_2)
         if text_list_index_1[0].isdigit():
             if flag:
                 info_str = text_list_index_0[2] + '|' + text_list_index_1[1]
@@ -95,7 +105,7 @@ def one_page(page):
                 tmp = ""
                 for xx in text_list_index_2[:-2]:
                     tmp += xx
-                info_str = text_list_index_0[2] + '|' + text_list_index_1[1] + '|' + tmp
+                info_str = text_list_index_0[2] + '|' + text_list_index_1[1] + tmp
             res['商品编码'].append(text_list_index_0[1] + text_list_index_1[0])
         else:
             if flag:
@@ -110,10 +120,10 @@ def one_page(page):
         # print(info_str)
         res['项号'].append(text_list_index_0[0])
         info_str = info_str.replace('及', '|')
-        print(info_str)
+        # print(info_str)
         info_list = info_str.split('|')
         info_list = [word for word in info_list if word != ""]
-        print(info_list)
+        # print(info_list)
 
         tmp_cai = ""
         ping_flag = True
@@ -142,10 +152,15 @@ def one_page(page):
             res['织造方式'].append("")
         res['品名'].append(info_list[0].replace('4', ''))
         if ping_flag:
-            if info_list[-1].isdigit():
-                res['品牌'].append(info_list[-2].replace("无中文", ""))
-            else:
-                res['品牌'].append(info_list[-1].replace("无中文", ""))
+            tmpL = re.findall(r"[A-za-z]*", info_str)
+            # print(tmpL)
+            tmpP = "".join(tmpL)
+            # print(tmpP)
+            res['品牌'].append(tmpP)
+            # if info_list[-1].isdigit() or len(re.findall(r"[A-Za-z]*", info_list[-1])) == 0:
+            #     res['品牌'].append(info_list[-2].replace("无中文", ""))
+            # else:
+            #     res['品牌'].append(info_list[-1].replace("无中文", ""))
         res['原产国'].append(text_list_index_0[5])
         res['币制'].append(text_list_index_2[-1])
         # tmp = text_list_index_2[-2]
@@ -153,13 +168,13 @@ def one_page(page):
         # print(2222, text_list_index_1[-6])
         # print(3333, text_list_index_2[-2])
         tmp_list = [text_list_index_0[-6], text_list_index_1[-6], text_list_index_2[-2]]
-        print(2222,tmp_list)
+        # print(2222, tmp_list)
         # tmp_list = [tmp for tmp in tmp_list if "千克" not in tmp and tmp != "" and not tmp.isdigit()]
         new_tmp_list = []
         for tmp in tmp_list:
             if "个" in tmp or "件" in tmp or "双" in tmp or "个" in tmp or "条" in tmp:
                 new_tmp_list.append(tmp)
-        print('1111', new_tmp_list)
+        # print('1111', new_tmp_list)
         tmp = new_tmp_list[-1]
 
         num = ''.join(re.findall(r'[0-9]', tmp))
@@ -227,6 +242,9 @@ def get_excel(pdf_path):
         # print(index)
         # print(all_result[index])
         df = pd.DataFrame(all_result[index]['result'])
+        # print('-----------------------------------')
+        # print(index)
+        # print(df)
         frames.append(df)
         # df.to_excel(writer, sheet_name="Sheet" + str(index), index=False)
         # break
