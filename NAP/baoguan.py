@@ -184,8 +184,8 @@ def one_page(page):
         num = ''.join(re.findall(r'[0-9]', tmp))
         res['数量'].append(num)
         res['单位'].append(tmp.replace(num, ""))
-        print(text_list_index_0)
-        print(text_list_index_1)
+        # print(text_list_index_0)
+        # print(text_list_index_1)
         res['总价'].append(text_list_index_1[-5])
 
         if kuan_flag:
@@ -196,11 +196,19 @@ def one_page(page):
         if "报关单号" not in res:
             res["报关单号"] = [""]
         info_length = len(res['项号'])
+
         for key in res:
-            if len(res[key]) < info_length:
-                res[key] += [""] * (info_length - len(res[key]))
+            if key in ["报关单号", "特殊关系确认", "价格影响确认", "支付特许权使用费确认", "自报自缴"]:
+                # print(res[key][0])
+                if len(res[key]) < info_length:
+                    res[key] = res[key] * info_length
+                else:
+                    res[key] = res[key][:info_length]
             else:
-                res[key] = res[key][:info_length]
+                if len(res[key]) < info_length:
+                    res[key] += [""] * (info_length - len(res[key]))
+                else:
+                    res[key] = res[key][:info_length]
 
     return res
 
@@ -258,6 +266,7 @@ def get_excel(pdf_path):
     result = result[["报关单号", "项号", "款号", "商品编码", "品名", "品牌", "织造方式",
                      "材质", "原产国", "币制", "数量", "单位", "总价", "特殊关系确认",
                      "价格影响确认", "支付特许权使用费确认", "自报自缴"]]
+    print(result)
     result.to_excel(pdf_path.split("/")[-1].split(".")[0] + ".xlsx", index=None)
     # writer.save()
 
