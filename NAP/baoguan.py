@@ -168,15 +168,20 @@ def one_page(page):
         # print(2222, text_list_index_1[-6])
         # print(3333, text_list_index_2[-2])
         try:
-            tmp_list = [text_list_index_0[-6], text_list_index_1[-6], text_list_index_2[-2]]
+            if len(re.findall(r'[a-zA-Z]', text_list_index_2[-1])) > 0:
+                tmp_list = [text_list_index_0[-6], text_list_index_1[-6], text_list_index_2[-3]]
+            else:
+                tmp_list = [text_list_index_0[-6], text_list_index_1[-6], text_list_index_2[-2]]
+
         except Exception as e:
             print(e)
             tmp_list = [text_list_index_2[-2]]
         # print(2222, tmp_list)
         # tmp_list = [tmp for tmp in tmp_list if "千克" not in tmp and tmp != "" and not tmp.isdigit()]
         new_tmp_list = []
+        # print('00000', tmp_list)
         for tmp in tmp_list:
-            if "个" in tmp or "件" in tmp or "双" in tmp or "个" in tmp or "条" in tmp:
+            if "个" in tmp or "件" in tmp or "双" in tmp or "个" in tmp or "条" in tmp or "对" in tmp or "套" in tmp:
                 new_tmp_list.append(tmp)
         # print('1111', new_tmp_list)
         tmp = new_tmp_list[-1]
@@ -195,20 +200,22 @@ def one_page(page):
         # print(res)
         if "报关单号" not in res:
             res["报关单号"] = [""]
-        info_length = len(res['项号'])
 
-        for key in res:
-            if key in ["报关单号", "特殊关系确认", "价格影响确认", "支付特许权使用费确认", "自报自缴"]:
-                # print(res[key][0])
-                if len(res[key]) < info_length:
-                    res[key] = res[key] * info_length
-                else:
-                    res[key] = res[key][:info_length]
+    info_length = len(res['项号'])
+
+    res['总价'] = ['{:g}'.format(float(i)) for i in res['总价']]
+    for key in res:
+        if key in ["报关单号", "特殊关系确认", "价格影响确认", "支付特许权使用费确认", "自报自缴"]:
+            # print(res[key][0])
+            if len(res[key]) < info_length:
+                res[key] = res[key] * info_length
             else:
-                if len(res[key]) < info_length:
-                    res[key] += [""] * (info_length - len(res[key]))
-                else:
-                    res[key] = res[key][:info_length]
+                res[key] = res[key][:info_length]
+        else:
+            if len(res[key]) < info_length:
+                res[key] += [""] * (info_length - len(res[key]))
+            else:
+                res[key] = res[key][:info_length]
 
     return res
 
@@ -278,7 +285,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Params to use fro train algorithm")
 
     parser.add_argument("--pdf_path", "-pdf", type=str,
-                        default="11.11/text.pdf", nargs='?', help="what scenes this model used")
+                        default="11.11/224920201000070308.pdf", nargs='?', help="what scenes this model used")
     args = parser.parse_args()
 
     get_excel(args.pdf_path)

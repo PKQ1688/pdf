@@ -13,6 +13,7 @@ def parse_pdf(pdf_path):
     res_dict = dict()
     print(pdf_path)
     try:
+        print()
         tables = camelot.read_pdf(pdf_path)
         content = tables[0].data
     except Exception as e:
@@ -21,12 +22,14 @@ def parse_pdf(pdf_path):
         return {"error": "输入票据存在问题", "status": 1}
     for ori_row in content:
         row = list()
+        # print(row)
         for content in ori_row:
             if content is not None and content != "":
                 row.append(content.replace("\n", "").replace(" ", ""))
         if len(row) == 0:
             continue
 
+        # print(row)
         row_line = "".join(row)
 
         if "车架号" in row_line or "车辆识别代码" in row_line:
@@ -71,7 +74,8 @@ def parse_pdf(pdf_path):
 
 
 if __name__ == '__main__':
-    for pdf_name in pdf_list:
-        pdf_path = os.path.join(pdf_file_path, pdf_name)
-        parse_pdf(pdf_path)
-        # break
+    # for pdf_name in pdf_list:
+    #     pdf_path = os.path.join(pdf_file_path, pdf_name)
+    #     parse_pdf(pdf_path)
+    # break
+    parse_pdf(pdf_path="pdf_file/众诚汽车保险股份有限公司.pdf")
