@@ -162,23 +162,30 @@ def one_page(page):
             # print(tmpL)
             tmpP = "".join(tmpL)
             # print(tmpP)
-            if len(tmpP) >2:
+            if len(tmpP) > 2:
                 res['品牌'].append(tmpP)
             # if info_list[-1].isdigit() or len(re.findall(r"[A-Za-z]*", info_list[-1])) == 0:
             #     res['品牌'].append(info_list[-2].replace("无中文", ""))
             # else:
             #     res['品牌'].append(info_list[-1].replace("无中文", ""))
-        if text_list_index_0[5] not in ["波斯尼亚和黑塞"]:
-            res['原产国'].append(text_list_index_0[5])
-        else:
-            res["原产国"].append(text_list_index_0[5] + text_list_index_1[-4])
-
         tmp_res = [i for i in re.findall(r'[a-zA-Z]*', text_list_index_2[-1]) if i != ""]
         # print(re_res)
+
         if len(tmp_res) > 0 and "(" in text_list_index_2[-1]:
             res['币制'].append(text_list_index_2[-2])
+            guo_flag = True
         else:
             res["币制"].append(text_list_index_2[-1])
+            guo_flag = False
+
+        # if text_list_index_0[5] not in ["波斯尼亚和黑塞"]:
+        #     res['原产国'].append(text_list_index_0[5])
+        # else:
+        #     res["原产国"].append(text_list_index_0[5] + text_list_index_1[-4])
+        if len(text_list_index_0[5]) >= 7 and guo_flag:
+            res["原产国"].append(text_list_index_0[5] + text_list_index_1[-4])
+        else:
+            res['原产国'].append(text_list_index_0[5])
         # tmp = text_list_index_2[-2]
         # print(1111, text_list_index_0[-5])
         # print(2222, text_list_index_1[-6])
