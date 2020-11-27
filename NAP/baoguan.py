@@ -5,9 +5,15 @@ import pandas as pd
 import xlwt
 import collections
 import re
+from decimal import Decimal
 
 # pdf_path = "Oct_2020/224920201000059894-A01.pdf"
 pd.set_option('display.max_columns', None)
+
+
+def format_float(f):
+    d = Decimal(str(f))
+    return d.quantize(Decimal(1)) if d == d.to_integral() else d.normalize()
 
 
 def one_page(page):
@@ -203,7 +209,9 @@ def one_page(page):
 
     info_length = len(res['项号'])
 
-    res['总价'] = ['{:g}'.format(float(i)) for i in res['总价']]
+    # res['总价'] = ['{:g}'.format(float(i)) for i in res['总价']]
+    res['总价'] = [format_float(float(i)) for i in res['总价']]
+
     for key in res:
         if key in ["报关单号", "特殊关系确认", "价格影响确认", "支付特许权使用费确认", "自报自缴"]:
             # print(res[key][0])
@@ -285,7 +293,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Params to use fro train algorithm")
 
     parser.add_argument("--pdf_path", "-pdf", type=str,
-                        default="11.11/224920201000070308.pdf", nargs='?', help="what scenes this model used")
+                        default="11.11/224920201000070328.pdf", nargs='?', help="what scenes this model used")
     args = parser.parse_args()
 
     get_excel(args.pdf_path)
